@@ -2,7 +2,23 @@
 {% block body %}
 {{ super() }}
 <div class="container">
-<form role="form" action="/admin/save/">
+ {{ form.about_detail(cols='35', rows='20') }}
+<form role="form" method="POST">
+  {% for field in form %}
+  {% if field.type != "HiddenField" %}
+  <div class="form-group">
+    <label><b>{{ field.label }}</b></label>
+    {% if field.type != "TextAreaField" %}
+        {{ field }}
+    {% else %}
+        {{ field.about_detail(cols='35', rows='20') }}
+    {% endif %}
+  </div>  
+  {% else %}
+    {{ field }}
+  {% endif %}
+  {% endfor %}
+  <!--
   <div class="form-group">
     <label><b>Blog Title</b></label>
     <input type="text" class="form-control" style="width:500px" placeholder="Enter title">
@@ -19,6 +35,7 @@
     <label><b>About Detail</b></label>
     <textarea class="form-control" rows="7" style="width:500px"></textarea>
   </div>
+  -->
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
 </div>

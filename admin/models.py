@@ -1,11 +1,13 @@
 #coding=utf-8
+from flask import request, redirect
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.admin.base import AdminIndexView, expose
-from wtforms import validators
 from datetime import datetime
 from main import app
-from wtforms import Form, StringField, TextAreaField, TextField
+from wtforms import validators, Form, StringField, TextAreaField, TextField, \
+	HiddenField
+from wtforms.widgets import TextArea
 
 db = SQLAlchemy(app)
 
@@ -136,13 +138,33 @@ class HomeView(AdminIndexView):
     	config = Config.query.get(1)
         return self.render('admin/index.html', config=config)
 
-    @expose('/config/')
+    @expose('/config/', methods=('GET', 'POST'))
     def config(self):
-        return self.render('admin/config.html')
+    	form = ConfigForm(request.form)
+    	if request.method == 'POST' and form.validate():
+    		config = Config()
+    		form.populate_obj(config)
+    		if int(config.id) == 1:
+    			db.session.merge(config)
+    		else:
+    			config.id = 1
+	    		db.session.add(config)
+    		db.session.commit()
+    		return redirect('/admin')
 
-    @expose('/save/')
-    def save(self):
-        return 'save!'
+    	if request.method == 'GET':
+	    	config = Config.query.get(1)
+	    	form = ConfigForm(obj=config)
+
+        return self.render('admin/config.html', form=form)
+
+class ConfigForm(Form):
+	id = HiddenField()
+	blog_title = StringField('Blog Title', validators=[validators.input_required()])
+	blog_subtitle = StringField('Blog Subtitle', validators=[validators.input_required()])
+	about_author = StringField('About Author', validators=[validators.input_required()])
+	about_detail = StringField('About Detail', widget=TextArea(), \
+		validators=[validators.input_required()])
 
 if __name__ == '__main__':
 	db.drop_all()
