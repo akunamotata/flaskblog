@@ -144,7 +144,7 @@ class HomeView(AdminIndexView):
     	if request.method == 'POST' and form.validate():
     		config = Config()
     		form.populate_obj(config)
-    		if int(config.id) == 1:
+    		if len(config.id) != 0 and int(config.id) == 1:
     			db.session.merge(config)
     		else:
     			config.id = 1
@@ -160,10 +160,11 @@ class HomeView(AdminIndexView):
 
 class ConfigForm(Form):
 	id = HiddenField()
-	blog_title = StringField('Blog Title', validators=[validators.input_required()])
-	blog_subtitle = StringField('Blog Subtitle', validators=[validators.input_required()])
-	about_author = StringField('About Author', validators=[validators.input_required()])
-	about_detail = StringField('About Detail', widget=TextArea(), \
+	blog_title = StringField('BlogTitle', validators=[validators.input_required()])
+	blog_subtitle = StringField('BlogSubtitle', validators=[validators.input_required()])
+	about_author = StringField('AboutAuthor', widget=TextArea(), \
+		validators=[validators.input_required()])
+	about_detail = StringField('AboutDetail', widget=TextArea(), \
 		validators=[validators.input_required()])
 
 if __name__ == '__main__':

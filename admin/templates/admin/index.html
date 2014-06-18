@@ -1,7 +1,14 @@
 {% extends 'admin/master.html' %}
 {% block body %}
 {{ super() }}
-<div class="container">
+<ul class="nav nav-tabs">
+  <li class="active">
+    <a href="/admin/">Setting</a>
+  </li>
+  <li>
+    <a href="/admin/config/">Edit</a>
+  </li>
+</ul>
 <form role="form" action="/admin/config/">
   <div class="form-group">
     <label><b>Blog Title</b></label>
@@ -29,5 +36,4 @@
   </div>
   <button type="submit" class="btn btn-default">Edit</button>
 </form>
-</div>
 {% endblock body %}

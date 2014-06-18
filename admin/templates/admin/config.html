@@ -1,42 +1,102 @@
 {% extends 'admin/master.html' %}
 {% block body %}
 {{ super() }}
-<div class="container">
- {{ form.about_detail(cols='35', rows='20') }}
-<form role="form" method="POST">
-  {% for field in form %}
-  {% if field.type != "HiddenField" %}
-  <div class="form-group">
-    <label><b>{{ field.label }}</b></label>
-    {% if field.type != "TextAreaField" %}
-        {{ field }}
-    {% else %}
-        {{ field.about_detail(cols='35', rows='20') }}
-    {% endif %}
-  </div>  
-  {% else %}
-    {{ field }}
-  {% endif %}
-  {% endfor %}
-  <!--
-  <div class="form-group">
-    <label><b>Blog Title</b></label>
-    <input type="text" class="form-control" style="width:500px" placeholder="Enter title">
-  </div>
-  <div class="form-group">
-    <label><b>Blog Subtitle</b></label>
-    <input type="text" class="form-control" style="width:500px" placeholder="Enter subtitle">
-  </div>
-  <div class="form-group">
-    <label><b>About Author</b></label>
-    <textarea class="form-control" rows="7" style="width:500px"></textarea>
-  </div>
-  <div class="form-group">
-    <label><b>About Detail</b></label>
-    <textarea class="form-control" rows="7" style="width:500px"></textarea>
-  </div>
-  -->
-  <button type="submit" class="btn btn-default">Submit</button>
+<!--
+<style type="text/css">
+  input, textarea, .uneditable-input {
+    width: 500px;
+  }
+</style>
+-->
+{% macro  error(field) -%}
+{% if field.errors %}
+error
+{% endif %}
+{%- endmacro %}
+<ul class="nav nav-tabs">
+  <li>
+    <a href="/admin/">Setting</a>
+  </li>
+  <li class="active">
+  <a href="javascript:void(0);">Edit</a>
+  </li>
+</ul>
+<form enctype="multipart/form-data" class="form-horizontal" method="POST" action="">
+  <fieldset>
+    <div class="control-group {{error(form.blog_title)}}">
+      <div class="control-label">
+        <label for="blog_title">
+          {{ form.blog_title.label.text }} <strong style="color: red">*</strong>
+        </label>
+      </div>
+      <div class="controls">
+        <div>
+          {{ form.blog_title }}
+          {{ form.id }}
+        </div>
+        {% if form.blog_title.errors %}
+        <ul class="input-errors">
+          <li>{{ form.blog_title.errors[0] }}</li>
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="control-group {{error(form.blog_subtitle)}}">
+      <div class="control-label">
+        <label for="blog_subtitle">
+          {{ form.blog_subtitle.label.text }} <strong style="color: red">*</strong>
+        </label>
+      </div>
+      <div class="controls">
+        <div>{{ form.blog_subtitle }}</div>
+        {% if form.blog_subtitle.errors %}
+        <ul class="input-errors">
+          <li>{{ form.blog_subtitle.errors[0] }}</li>
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="control-group {{error(form.about_author)}}">
+      <div class="control-label">
+        <label for="about_author">
+          {{ form.about_author.label.text }}
+          <strong style="color: red">*</strong>
+        </label>
+      </div>
+      <div class="controls">
+        <div>{{ form.about_author(rows='6') }}</div>
+        {% if form.about_author.errors %}
+        <ul class="input-errors">
+          <li>{{ form.about_author.errors[0] }}</li>
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="control-group {{error(form.about_detail)}}">
+      <div class="control-label">
+        <label for="about_detail">
+          {{ form.about_detail.label.text }}
+          <strong style="color: red">*</strong>
+        </label>
+      </div>
+      <div class="controls">
+        <div>{{ form.about_detail(cols='120', rows='6') }}</div>
+        {% if form.about_detail.errors %}
+        <ul class="input-errors">
+          <li>{{ form.about_detail.errors[0] }}</li>
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="controls">
+        <input type="submit" value="Submit" class="btn btn-primary btn-large">
+      </div>
+    </div>
+  </fieldset>
 </form>
-</div>
 {% endblock body %}
