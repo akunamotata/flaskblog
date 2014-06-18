@@ -11,7 +11,7 @@ from wtforms.widgets import TextArea
 
 db = SQLAlchemy(app)
 
-class Config(db.Model):
+class Setting(db.Model):
 	'''
 		博客配置
 	'''
@@ -92,7 +92,7 @@ class User(db.Model):
 	def __unicode__(self):
 		return self.name
 
-class ConfigAdminView(ModelView):
+class SettingAdminView(ModelView):
 	column_list = ('id', 'blog_title', 'blog_subtitle')
 	column_exclude_list = ('about_author', 'about_detail')
 	column_searchable_list = ('blog_title', 'blog_subtitle' \
@@ -120,6 +120,10 @@ class ArticleAdminForm(Form):
 '''
 
 class ArticleAdminView(ModelView):
+
+	create_template = '/admin/article_edit.html'
+	edit_template = '/admin/article_edit.html'
+
 	column_list = ('id', 'title', 'modify_time')
 	column_searchable_list = ('title',)
 	form_columns = ('title', 'category', 'author', 'tags', 'content')
@@ -129,36 +133,42 @@ class ArticleAdminView(ModelView):
 		modify_time=dict(default=datetime.now)
 	)
 
+	form_widget_args = {
+        'content': {
+            'class': 'ckeditor'
+        }
+    }
+
 class CategoryAdminView(ModelView):
 	form_columns = ('name',)
 
 class HomeView(AdminIndexView):
     @expose('/')
     def index(self):
-    	config = Config.query.get(1)
-        return self.render('admin/index.html', config=config)
+    	setting = Setting.query.get(1)
+        return self.render('admin/index.html', setting=setting)
 
-    @expose('/config/', methods=('GET', 'POST'))
-    def config(self):
-    	form = ConfigForm(request.form)
+    @expose('/setting/', methods=('GET', 'POST'))
+    def setting(self):
+    	form = SettingForm(request.form)
     	if request.method == 'POST' and form.validate():
-    		config = Config()
-    		form.populate_obj(config)
-    		if len(config.id) != 0 and int(config.id) == 1:
-    			db.session.merge(config)
+    		setting = Setting()
+    		form.populate_obj(setting)
+    		if len(setting.id) != 0 and int(setting.id) == 1:
+    			db.session.merge(setting)
     		else:
-    			config.id = 1
-	    		db.session.add(config)
+    			setting.id = 1
+	    		db.session.add(setting)
     		db.session.commit()
     		return redirect('/admin')
 
     	if request.method == 'GET':
-	    	config = Config.query.get(1)
-	    	form = ConfigForm(obj=config)
+	    	setting = Setting.query.get(1)
+	    	form = SettingForm(obj=setting)
 
-        return self.render('admin/config.html', form=form)
+        return self.render('admin/setting.html', form=form)
 
-class ConfigForm(Form):
+class SettingForm(Form):
 	id = HiddenField()
 	blog_title = StringField('BlogTitle', validators=[validators.input_required()])
 	blog_subtitle = StringField('BlogSubtitle', validators=[validators.input_required()])

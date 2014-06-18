@@ -6,32 +6,32 @@
     <a href="/admin/">Setting</a>
   </li>
   <li>
-    <a href="/admin/config/">Edit</a>
+    <a href="/admin/setting/">Edit</a>
   </li>
 </ul>
-<form role="form" action="/admin/config/">
+<form role="form" action="/admin/setting/">
   <div class="form-group">
     <label><b>Blog Title</b></label>
     <div class="col-sm-10">
-      <p class="form-control-static">{{ config.blog_title }}</p>
+      <p class="form-control-static">{{ setting.blog_title }}</p>
     </div>
   </div>
   <div class="form-group">
     <label><b>Blog Subtitle</b></label>
     <div class="col-sm-10">
-      <p class="form-control-static">{{ config.blog_subtitle }}</p>
+      <p class="form-control-static">{{ setting.blog_subtitle }}</p>
     </div>
   </div>
   <div class="form-group">
     <label><b>About Author</b></label>
     <div class="col-sm-10">
-      <p class="form-control-static">{{ config.about_author }}</p>
+      <p class="form-control-static">{{ setting.about_author }}</p>
     </div>
   </div>
   <div class="form-group">
     <label><b>About Detail</b></label>
     <div class="col-sm-10">
-      <p class="form-control-static">{{ config.about_detail }}</p>
+      <p class="form-control-static">{{ setting.about_detail }}</p>
     </div>
   </div>
   <button type="submit" class="btn btn-default">Edit</button>
