@@ -8,15 +8,12 @@ app.config['SECRET_KEY']              = '123456'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flaskblog.sqlite'
 app.config['SQLALCHEMY_ECHO']         = True
 
-
-@app.route('/')
-def index():
-	return render_template('index.html')
+from views import *
 
 if __name__ == '__main__':
 
-	from models import *
 	from admin.views import *
+	from models import *
 
 	admin = Admin(app, name='flaskblog', url='/admin', index_view=HomeView())
 	admin.add_view(MessageAdminView(Message, db.session))

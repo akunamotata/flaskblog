@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% macro focus(type, current) -%}
+	{% if type == current %}
+		id="current"
+	{% endif %}
+{%- endmacro %}
+{% block header %}
+<h1 id="logo-text">
+<a href="/">{{blog.blog_title}}</a>
+</h1>
+<p id="slogan">{{blog.blog_subtitle}}</p>
+<div id="nav">
+	<ul>
+		<li {{ focus('home', current) }}><a href="/">Home</a></li>
+		<li {{ focus('about', current) }}><a href="/about">About</a></li>
+	</ul>
+</div>
+<!--
+<form id="quick-search" method="get" action="#">
+	<fieldset class="search">
+		<label for="qsearch">Search:</label> <input class="tbox"
+		id="qsearch" type="text" name="qsearch" value="Search..." />
+		<button class="btn">Search</button>
+	</fieldset>
+</form>
+-->
+{% endblock %}
+{% block sidebar %}
+<div class="about-me">
+  <h3>关于我</h3>
+  <p>
+    <a href="#"><img src="/static/images/gravatar.jpg" width="40"
+      height="40" alt="" class="float-left" /></a>{{ blog.about_author }}<a href="/about">查看更多...</a>
+  </p>
+</div>
+{% endblock %}
+{% block sitelinks %}
+<li><a href="/">Home</a></li>
+<li><a href="/about">About</a></li>
+{% endblock %}

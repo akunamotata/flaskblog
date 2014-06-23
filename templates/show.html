@@ -1,0 +1,104 @@
+{% extends 'common.html' %}
+{% block main %}
+      <div class="post">
+        <div class="right">
+          <h2>
+            <a href="#">{{ article.title }}</a>
+          </h2>
+          <p class="post-info">
+            位于分类 <a href="#">{{ article.category.name }}</a>
+          </p>
+          <p>
+          {{ article.content|safe }}
+          </p>
+        </div>
+        <div class="left">
+          <p class="dateinfo">
+            {{ article.create_time|dateformat|safe }}
+          </p>
+          <div class="post-meta">
+            <h4>文章信息</h4>
+            <ul>
+              <li class="user">{{ article.author.name }}</li>
+              <li class="time">{{ article.create_time|timeformat|safe }}</li>
+              <li class="comment"><a href="#">{{ article.messages.length }}个评论</a></li>
+              <li class="permalink"><a href="/blog/{{ article.id }}">文章链接</a></li>
+            </ul>
+          </div> 
+          <div class="post-meta">
+            <h4>标签</h4>
+            <ul class="tags">
+              {% for tag in article.tags %}
+              <li><a href="/tag/{{ tag.id }}">{{ tag.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="post-bottom-section">
+        <h4>3个留言</h4>
+        <div class="right">
+          <ol class="commentlist">
+            <li class="depth-1">
+              <div class="comment-info"> <img width="40" height="40" class="avatar" src="/static/images/gravatar.jpg" alt=""> <cite> <a href="javascript:void(0);">Erwin</a> 留言: <br>
+                <span class="comment-data"><a href="javascript:void(0);">2013年5月23日 15:41:27</a></span> </cite> </div>
+              <div class="comment-text">
+                <p>我给你留言了！</p>
+                <div class="reply"> <a href="#msg2me" class="comment-reply-link">回复</a> </div>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+      <div class="post-bottom-section">
+        <h4>给博主留言：</h4>
+        <div id="msg2me" class="right">
+          <form id="commentform" method="post" action="/message">
+            <p>
+              <label for="nickname">昵称</label>&nbsp;<font color="red"><b>*</b></font>
+              <br>
+              <input type="text" tabindex="1" value="" name="nickname" id="name">
+              <input type="hidden" name="blog_id" value="{{ article.id }}">
+            </p>
+            <p>
+              <label for="email">邮箱地址(绝对保密)</label>&nbsp;<font color="red"><b>*</b></font>
+              <br>
+              <input type="text" tabindex="2" value="你的邮箱地址" name="email" id="email">
+            </p>
+            <p>
+              <label for="address">网站地址</label>
+              <br>
+              <input type="text" tabindex="3" value="你的网站地址" name="address" id="website">
+            </p>
+            <p>
+              <label for="content">你的留言</label>&nbsp;<font color="red"><b>*</b></font>
+              <br>
+              <textarea tabindex="4" cols="20" rows="10" name="content" id="message"></textarea>
+            </p>
+            <p class="no-border">
+              <input type="submit" tabindex="5" value="提交留言" class="button">
+            </p>
+          </form>
+          <script type="text/javascript">
+            var input_name = "请输入你的昵称";
+            $("#name").val(input_name);
+            $("#name").focus(function(){
+              if($.trim($(this).val()) == input_name){
+                $(this).val("");
+              }
+            });
+            $("#name").blur(function(){
+              if($.trim($(this).val()) == ""){
+                $(this).val(input_name);
+              }
+            });
+            $("#commentform").submit(function(){
+              if(($.trim($("#name").val()) == "")||($.trim($("#name").val()) == input_name)){
+                alert(input_name);
+                return false;
+              }
+            });
+          </script>
+        </div>
+      </div>
+{% endblock %}
